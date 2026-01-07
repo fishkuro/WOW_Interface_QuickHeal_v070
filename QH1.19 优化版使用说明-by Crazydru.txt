@@ -1,0 +1,81 @@
+## 注意！！！
+- QH目前和Nampower组件的队列施法功能不兼容，会导致QH施法错乱
+- 最新版本的QH尝试修复这个问题，目前会在qh使用期间暂时关闭Nampower的施法队列功能，并且无法并列执行多个QH指令，如果还是无法解决问题，请关闭Nampower模组
+
+## 安装
+- 将QuickHeal文件夹放入\Interface\AddOns文件夹内
+- 最好安装kook插件仓库发布的最新BCS插件
+
+## 使用方法
+
+**帮助**
+/qh help 打开命令列表
+
+**设置**
+/qh cfg 打开配置面板
+
+**治疗**
+在按键设置中设置对应治疗模式按键，或者在宏中写入短代码调用对应治疗，如“/qh”
+
+
+**等级滑块**
+为了节约蓝量，可以通过拖动等级滑块来设置使用治疗技能的最高等级
+
+/qh dr 打开等级滑块界面
+
+**High HPS vs Normal HPS**
+
+/qh toggle
+切换健康阈值100%或0%
+
+High HPS 即健康阈值100%
+
+Normal HPS 即健康阈值0%
+
+**坦克列表**
+
+/qh tanklist
+打开或关闭坦克列表
+
++ 增加目标到坦克列表.  - 从坦克列表移除目标.  C 清除坦克列表.
+
+**其他按键或特殊治疗模式**
+
+/qh [mask] [type] [mod] 或 /quickheal [mask] [type] [mod]:<Br>
+
+[mask]: 限制治疗目标:<Br>
+player = 玩家<Br>
+target = 玩家的目标<Br>
+targettarget = 玩家目标的目标<Br>
+party = 玩家小队<Br>
+mt = 坦克列表中的目标<Br>
+nonmt = 非坦克列表中的目标<Br>
+subgroup = 特定团队(配置面板中设置)<Br>
+
+[type]: 治疗技能类型:<Br>
+heal: 使用直接治疗技能.<Br>
+hot: 使用特定技能.  回春术（德鲁伊），恢复（牧师），神圣震击（骑士）.<Br>
+chainheal: 使用治疗链（只有萨满有效）.<Br>通常只使用1级治疗链确保续航，搭配max后缀可以强制使用满级治疗链. <Crazydru>
+
+[mod]: 特殊治疗指令:<Br>
+max= 只使用最高级别治疗（heal、hot、chainheal模式均可使用）.<Br>
+fh = 火力全开模式，满级hot铺全团，无视目标是否满血.<Br>
+
+**超级宏调用命令**
+直接治疗：QuickHeal(Target, SpellID, extParam, forceMaxRank) 
+HOT治疗（包括神圣震击）：QuickHOT(Target, SpellID, extParam, forceMaxRank, noHpCheck) 
+治疗链：QuickChainHeal(Target, SpellID, extParam, forceMaxRank) 
+
+Target：治疗范围，如：mt、target、player等
+SpellID：锁定治疗技能，中文端用类似"回春术5"这样参数可以指定使用5级回春术，nil时由插件自主选择技能
+extParam：使用nil即可，不用管
+forceMaxHPS：是否使用最高级技能true/false（对于奶骑的QuickHOT指令，无论参数如何，只会使用最高级震击，避免低级震击浪费CD，false时只会治疗缺口大于最高级震击的目标，true时则会无视缺口治疗）
+noHpCheck：是否忽略目标血量true/false（只用于QuickHOT）
+
+QuickHeal_SetRatioHealthy(value) 修改健康阈值(value为0~1之间的值1即为100%)
+
+SetDownrankValue(value1,value2) 修改技能滑块值，value1设置可用常规治疗技能最高等级（德的触、牧师（强效）治疗术，萨满治疗波，骑士圣光术），value2设置可用快速治疗技能最高等级（德的愈合、牧师快速治疗，萨满次级治疗波，骑士闪现圣光术），nil为保持原值不变
+
+QuickHeal_SetWasteValue(value) 设置过量保护阈值（value取值范围为0~100，对应0~100%）
+
+QuickHeal_GetUnitHotValue(hot,unit) 返回unit的hot治疗数值（技能描述上的，并非实际治疗），如无该hot，则返回0，unit缺省则默认为“player”
